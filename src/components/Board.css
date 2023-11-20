@@ -1,0 +1,10 @@
+.status {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+.board-row {
+  display: flex;
+  justify-content: center;
+}
