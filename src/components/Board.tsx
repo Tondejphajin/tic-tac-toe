@@ -1,56 +1,118 @@
-import Strike from "./Strike";
-import Tile from "./Tile";
+import Square from "./Square";
+import "./Board.css";
 
-interface BoardProps {
-  tiles: Array<string>;
-  onTileClick: (index: number) => void;
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
 }
 
-export default function Board({ tiles, onTileClick }: BoardProps) {
+export default function Board({ squares, isXNext, onPlay }) {
+  function onSquareClick(index) {
+    if (squares[index] || calculateWinner(squares)) {
+      return;
+    }
+
+    const newSquares = squares.slice();
+
+    if (isXNext) {
+      newSquares[index] = "X";
+    } else {
+      newSquares[index] = "O";
+    }
+
+    onPlay(newSquares);
+  }
+
+  const winner = calculateWinner(squares);
+  let status: string;
+
+  if (winner) {
+    status = "The winner is " + winner;
+  } else {
+    status = "Current player: " + (isXNext ? "X" : "O");
+  }
+
   return (
-    <div className="board">
-      <Tile
-        value={tiles[0]}
-        className="right-border bottom-border"
-        onTileClick={() => onTileClick(0)}
-      ></Tile>
-      <Tile
-        value={tiles[1]}
-        className="right-border bottom-border"
-        onTileClick={() => onTileClick(1)}
-      ></Tile>
-      <Tile
-        value={tiles[2]}
-        className="bottom-border"
-        onTileClick={() => onTileClick(2)}
-      ></Tile>
-      <Tile
-        value={tiles[3]}
-        className="right-border bottom-border"
-        onTileClick={() => onTileClick(3)}
-      ></Tile>
-      <Tile
-        value={tiles[4]}
-        className="right-border bottom-border"
-        onTileClick={() => onTileClick(4)}
-      ></Tile>
-      <Tile
-        value={tiles[5]}
-        className="bottom-border"
-        onTileClick={() => onTileClick(5)}
-      ></Tile>
-      <Tile
-        value={tiles[6]}
-        className="right-border "
-        onTileClick={() => onTileClick(6)}
-      ></Tile>
-      <Tile
-        value={tiles[7]}
-        className="right-border "
-        onTileClick={() => onTileClick(7)}
-      ></Tile>
-      <Tile value={tiles[8]} onTileClick={() => onTileClick(8)}></Tile>
-      <Strike></Strike>
-    </div>
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square
+          value={squares[0]}
+          onSquareClick={() => {
+            onSquareClick(0);
+          }}
+        />
+        <Square
+          value={squares[1]}
+          onSquareClick={() => {
+            onSquareClick(1);
+          }}
+        />
+        <Square
+          value={squares[2]}
+          onSquareClick={() => {
+            onSquareClick(2);
+          }}
+        />
+      </div>
+
+      <div className="board-row">
+        <Square
+          value={squares[3]}
+          onSquareClick={() => {
+            onSquareClick(3);
+          }}
+        />
+        <Square
+          value={squares[4]}
+          onSquareClick={() => {
+            onSquareClick(4);
+          }}
+        />
+        <Square
+          value={squares[5]}
+          onSquareClick={() => {
+            onSquareClick(5);
+          }}
+        />
+      </div>
+
+      <div className="board-row">
+        <Square
+          value={squares[6]}
+          onSquareClick={() => {
+            onSquareClick(6);
+          }}
+        />
+        <Square
+          value={squares[7]}
+          onSquareClick={() => {
+            onSquareClick(7);
+          }}
+        />
+        <Square
+          value={squares[8]}
+          onSquareClick={() => {
+            onSquareClick(8);
+          }}
+        />
+      </div>
+    </>
   );
 }
