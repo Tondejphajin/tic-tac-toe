@@ -1,12 +1,9 @@
-import TicTacToe from "./components/TicTacToe";
-import "./App.css";
+import Game from "./components/Game";
 
-function App() {
+export default function App() {
   return (
-    <>
-      <TicTacToe></TicTacToe>
-    </>
+    <div>
+      <Game />
+    </div>
   );
 }
-
-export default App;
